@@ -1,25 +1,18 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>تجربة GitHub HR</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لوحة الموارد البشرية</title>
 <style>
-body{font-family:Arial,sans-serif;background:#f4f6f8;margin:0;padding:40px;color:#17202a}.card{max-width:700px;margin:auto;background:white;padding:30px;border-radius:18px;box-shadow:0 8px 30px #0001}h1{margin-top:0}.stats{display:flex;gap:15px}.stat{flex:1;background:#eef3ff;padding:20px;border-radius:12px;text-align:center}.num{font-size:30px;font-weight:bold}button{background:#111827;color:white;border:0;padding:12px 20px;border-radius:10px;cursor:pointer}#msg{margin-top:20px;font-weight:bold}</style>
-</head>
-<body>
-<div class="card">
-<h1>🧑‍💼 لوحة HR — تجربة GitHub</h1>
-<p>هذه أول صفحة تجريبية محفوظة مباشرة داخل مستودع GitHub.</p>
-<div class="stats">
-<div class="stat">الموظفون<div class="num">120</div></div>
-<div class="stat">الفروع<div class="num">6</div></div>
-<div class="stat">إقامات قريبة<div class="num">8</div></div>
-</div>
-<br>
-<button onclick="showMessage()">جرّب الزر</button>
-<div id="msg"></div>
-</div>
-<script>function showMessage(){document.getElementById('msg').textContent='ممتاز! الصفحة تعمل ويمكننا تطويرها إلى نظام HR كامل.'}</script>
-</body>
-</html>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Tahoma,sans-serif;background:#f5f7fb;color:#182230}.wrap{max-width:1180px;margin:auto;padding:28px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.top h1{margin:0;font-size:28px}.top p{margin:7px 0 0;color:#687386}.badge{background:#e8f5ee;color:#147a43;padding:9px 14px;border-radius:20px;font-weight:bold}.filters{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;background:white;padding:18px;border-radius:16px;box-shadow:0 5px 20px #18223012;margin-bottom:18px}label{font-size:13px;font-weight:bold;color:#5d6878;display:block;margin-bottom:7px}select,input{width:100%;padding:12px;border:1px solid #dce2ea;border-radius:10px;background:white;font-size:15px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.card{background:white;padding:20px;border-radius:16px;box-shadow:0 5px 20px #18223010}.card span{color:#687386;font-size:14px}.card strong{display:block;font-size:31px;margin-top:8px}.tablebox{background:white;border-radius:16px;padding:20px;box-shadow:0 5px 20px #18223010}table{width:100%;border-collapse:collapse;margin-top:10px}th,td{text-align:right;padding:13px 10px;border-bottom:1px solid #edf0f4}th{color:#687386;font-size:13px}.status{padding:6px 10px;border-radius:20px;font-size:12px;font-weight:bold}.ok{background:#e9f7ef;color:#167543}.warn{background:#fff4dc;color:#9a6500}.danger{background:#ffe7e7;color:#b42318}.empty{text-align:center;color:#7b8492;padding:25px}@media(max-width:800px){.filters,.cards{grid-template-columns:1fr 1fr}.top{display:block}.badge{display:inline-block;margin-top:12px}}@media(max-width:520px){.filters,.cards{grid-template-columns:1fr}.wrap{padding:15px}table{font-size:13px}}
+</style></head>
+<body><div class="wrap">
+<div class="top"><div><h1>🧑‍💼 لوحة الموارد البشرية</h1><p>تجربة تفاعلية — البيانات تجريبية وليست بيانات موظفين حقيقية</p></div><div class="badge">● النظام يعمل</div></div>
+<div class="filters"><div><label>الفرع</label><select id="branch" onchange="render()"><option value="الكل">كل الفروع</option><option>أبها 1</option><option>أبها 2</option><option>أبها 3</option><option>الخميس 1</option><option>الخميس 2</option><option>الخميس 3</option></select></div><div><label>الجنسية</label><select id="nationality" onchange="render()"><option value="الكل">كل الجنسيات</option><option>سعودي</option><option>مصري</option><option>هندي</option><option>باكستاني</option></select></div><div><label>بحث بالاسم</label><input id="search" oninput="render()" placeholder="اكتب اسم الموظف..."></div></div>
+<div class="cards"><div class="card"><span>عدد الموظفين</span><strong id="total">0</strong></div><div class="card"><span>سعوديون</span><strong id="saudi">0</strong></div><div class="card"><span>إقامات تحتاج متابعة</span><strong id="iqama">0</strong></div><div class="card"><span>فروع ظاهرة</span><strong id="branches">0</strong></div></div>
+<div class="tablebox"><h3>بيانات الموظفين</h3><table><thead><tr><th>الاسم</th><th>الفرع</th><th>الجنسية</th><th>الإقامة</th><th>الحالة</th></tr></thead><tbody id="rows"></tbody></table></div>
+</div><script>
+const employees=[
+['أحمد محمد','أبها 1','سعودي',140,'سارية'],['محمد علي','أبها 1','مصري',22,'تحتاج متابعة'],['سعيد حسن','أبها 2','هندي',75,'سارية'],['عمر خان','أبها 2','باكستاني',18,'تحتاج متابعة'],['خالد عبدالله','أبها 3','سعودي',210,'سارية'],['يوسف إبراهيم','الخميس 1','مصري',48,'سارية'],['ناصر سالم','الخميس 1','سعودي',35,'سارية'],['علي رضا','الخميس 2','هندي',12,'منتهية قريباً'],['فهد أحمد','الخميس 2','سعودي',120,'سارية'],['بلال محمود','الخميس 3','باكستاني',64,'سارية'],['راشد حسن','الخميس 3','سعودي',9,'منتهية قريباً'],['حسن جابر','أبها 3','مصري',90,'سارية']];
+function render(){let b=document.getElementById('branch').value,n=document.getElementById('nationality').value,q=document.getElementById('search').value.trim();let data=employees.filter(e=>(b==='الكل'||e[1]===b)&&(n==='الكل'||e[2]===n)&&(!q||e[0].includes(q)));document.getElementById('total').textContent=data.length;document.getElementById('saudi').textContent=data.filter(e=>e[2]==='سعودي').length;document.getElementById('iqama').textContent=data.filter(e=>e[3]<=60).length;document.getElementById('branches').textContent=new Set(data.map(e=>e[1])).size;document.getElementById('rows').innerHTML=data.length?data.map(e=>`<tr><td>${e[0]}</td><td>${e[1]}</td><td>${e[2]}</td><td>${e[3]} يوم</td><td><span class="status ${e[3]<=30?'danger':e[3]<=60?'warn':'ok'}">${e[4]}</span></td></tr>`).join(''):'<tr><td colspan="5" class="empty">لا توجد نتائج مطابقة</td></tr>'}render();
+</script></body></html>
